@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة تحكم المنيو</title>
+<style>
+:root{--bg:#eef0f3;--card:#fff;--tx:#1d2433;--mut:#667085;--bd:#d6dbe4;--ac:#0f766e;--dg:#b42318;color-scheme:light dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#10151c;--card:#1a212c;--tx:#e8ecf3;--mut:#9aa6b8;--bd:#2c3646;--ac:#2dd4bf;--dg:#f97066}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 15px/1.6 Tahoma,"Segoe UI",sans-serif;padding-bottom:70px}
+.w{max-width:1100px;margin:auto;padding:0 14px}
+header{position:sticky;top:0;z-index:6;background:var(--card);border-bottom:1px solid var(--bd)}header .w{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:10px 14px}
+header h1{margin:0;font-size:18px}.tb{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,.bt{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:9px;padding:7px 13px;cursor:pointer;text-decoration:none;display:inline-block}
+button.pr{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:700}button.pr:disabled{opacity:.45;cursor:not-allowed}button.dg{color:var(--dg)}
+.dot{display:none;color:#f59e0b;font-size:13px}.dot.on{display:inline}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:14px 0}.box h2{margin:0 0 10px;font-size:16px}
+.g{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+label{display:block;font-size:12.5px;color:var(--mut)}
+input[type=text],input[type=number],textarea,input[type=search]{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+input[type=color]{width:100%;height:38px;border:1px solid var(--bd);border-radius:8px;background:var(--bg)}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--ac)}
+.cr{display:flex;gap:8px;align-items:center;margin-bottom:8px}.cr input[type=text]{flex:1}
+.cat{border:1px solid var(--bd);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.ch{display:flex;gap:8px;align-items:center;justify-content:space-between;background:var(--bg);padding:8px 12px;font-weight:700}
+.ir{display:grid;gap:8px;grid-template-columns:64px 1fr;padding:10px 12px;border-top:1px solid var(--bd);align-items:start}
+.ir.off{opacity:.65}
+.th{width:64px;height:64px;border-radius:10px;border:1px dashed var(--bd);background:var(--bg) center/cover no-repeat;display:grid;place-items:center;color:var(--mut);font-size:12px;cursor:pointer;text-align:center}
+.f{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
+.f .wd{grid-column:1/-1}.ck{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:13px}.ck label{display:flex;gap:6px;align-items:center;color:var(--tx)}
+.mini{padding:3px 9px;font-size:13px}
+.ov{position:fixed;inset:0;background:var(--bg);z-index:30;display:none;align-items:center;justify-content:center;padding:16px}.ov.on{display:flex}
+.lb{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:22px;width:100%;max-width:340px;border-top:6px solid var(--ac)}.lb h2{margin:0 0 12px}.er{color:var(--dg);font-size:13px;min-height:20px}
+#toast{position:fixed;inset:auto 0 18px;margin:auto;width:max-content;max-width:92%;background:#101828;color:#fff;padding:10px 18px;border-radius:10px;display:none;z-index:40}
+.st{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 14px}
+.lb input[type=password]{width:100%;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);margin:4px 0 10px}
+select{padding:7px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit;max-width:130px}
+#us{align-items:flex-start;overflow:auto}.lw{max-width:860px;margin:auto}.lw table{width:100%;border-collapse:collapse;font-size:14px}.lw td,.lw th{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:right}
+.lw select{max-width:none}.qk{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}.bg{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--bd);color:var(--mut)}
+</style></head><body>
+<header><div class="w"><h1>لوحة تحكم المنيو <span class="dot" id="dt">● تغييرات غير محفوظة</span></h1>
+<div class="tb"><button class="pr" id="sv" onclick="save()" disabled>حفظ التغييرات</button><a class="bt" href="index.html" target="_blank" onclick="this.href='index.html?v='+Date.now()">معاينة المنيو</a><button onclick="backup()">نسخة احتياطية</button><button onclick="$('imp').click()">استعادة</button><input type="file" id="imp" accept=".json" hidden onchange="restore(this)"><button onclick="openUs()">👥 الموظفون والطلبات</button><button onclick="openPw()">كلمة المرور</button><button class="dg" onclick="logout()">خروج</button></div></div></header>
+<div class="w st"><input type="search" id="q" placeholder="ابحث عن صنف بالاسم..." oninput="M&&draw()"></div>
+<div class="w" id="app"></div>
+<div class="ov on" id="lg"><form class="lb" onsubmit="login(event)"><h2>دخول لوحة التحكم</h2><label for="lp">كلمة المرور</label><input id="lp" type="password" required style="width:100%;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);margin:4px 0 10px"><div class="er" id="er" role="alert"></div><button class="pr" style="width:100%">دخول</button></form></div>
+<div class="ov" id="pw"><div class="lb"><h2>تغيير كلمة المرور</h2><label>كلمة المرور الحالية</label><input id="po" type="password"><label>كلمة المرور الجديدة (6 أحرف على الأقل)</label><input id="pn" type="password"><div class="er" id="pe" role="alert"></div><div class="tb"><button class="pr" onclick="doPw()">حفظ</button><button onclick="$('pw').classList.remove('on')">إلغاء</button></div></div></div>
+<div class="ov" id="us"><div class="lb lw" style="max-width:860px"><div class="tb" style="justify-content:space-between"><h2 style="margin:0">الموظفون ونظام الطلبات</h2><button onclick="$('us').classList.remove('on')">إغلاق</button></div>
+<div class="qk"><a class="bt" href="orders.html" target="_blank">📋 شاشة الطلبات</a><a class="bt" href="kitchen.html" target="_blank">🍳 شاشة المطبخ</a><a class="bt" href="dashboard.html" target="_blank">📊 داشبورد المدير</a><a class="bt" href="qr.html" target="_blank">🔳 QR الطاولات</a></div>
+<div id="usb"></div></div></div>
+<div id="toast"></div>
+<script>
+let M=null,dirty=false;const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(t,ms=3000){const e=$("toast");e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",ms)}
+function mark(){dirty=true;$("sv").disabled=false;$("dt").classList.add("on")}
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+async function api(a,body,form){const o={credentials:"same-origin"};if(form){o.method="POST";o.body=form}else if(body){o.method="POST";o.headers={"Content-Type":"application/json"};o.body=JSON.stringify(body)}
+ const r=await fetch("api.php?action="+a+((o.method)?"":"&_="+Date.now()),o);if(r.status==401){lock();throw new Error("auth")}
+ let j;try{j=await r.json()}catch(e){throw new Error("استجابة غير صالحة من الخادم")}if(!j.ok)throw new Error(j.error||"خطأ");return j}
+function lock(){$("lg").classList.add("on")}
+async function login(e){e.preventDefault();$("er").textContent="";try{await api("login",{password:$("lp").value});$("lp").value="";$("lg").classList.remove("on");await load()}catch(x){$("er").textContent=x.message=="Failed to fetch"?"تعذر الاتصال بالخادم":x.message}}
+async function logout(){try{await api("logout",{})}catch(e){}M=null;lock()}
+async function load(){const r=await fetch("api.php?action=menu&_="+Date.now(),{cache:"no-store"});M=await r.json();dirty=false;$("sv").disabled=true;$("dt").classList.remove("on");draw()}
+async function save(){const bad=M.items.find(i=>!i.ar.trim());if(bad){toast("يوجد صنف بدون اسم، أكمله أو احذفه");return}
+ try{const j=await api("save",{menu:M});dirty=false;$("sv").disabled=true;$("dt").classList.remove("on");
+  let ok=true;try{const f=await(await fetch("api.php?action=menu&_="+Date.now(),{cache:"no-store"})).json(),a=f.config,b=M.config;ok=f.items.length==M.items.length&&["name","wa","color","color2","bg","text","card","htext","dine","delivery","service"].every(k=>(a[k]||"")==(b[k]||"")&&!!a[k]==!!b[k])}catch(e){}
+  toast(ok?"تم الحفظ ✓ ("+j.items+" صنف)":"تم الحفظ، لكن الخادم ما زال يعرض النسخة القديمة. غالباً الاستضافة تخزّن الصفحة مؤقتاً (Cache): أوقف الكاش لملف api.php أو امسحه من cPanel.",ok?3000:14000)}catch(e){if(e.message!="auth")toast("تعذر الحفظ: "+e.message,6000)}}
+const nid=a=>a.reduce((m,x)=>Math.max(m,x.id),0)+1;
+function cp(k,l,d){const v=M.config[k];return`<div><label>${l} ${v?"":"<small>(تلقائي)</small>"}</label><div class="cr"><input type="color" value="${esc(v||d)}" oninput="M.config.${k}=this.value;mark()" onchange="draw()"><button class="mini" onclick="M.config.${k}='';mark();draw()">تلقائي</button></div></div>`}
+function draw(){const c=M.config;if(!c.meals)c.meals={on:false,b:"الإفطار",bt:"4:00 ص – 11:00 ص",l:"الغداء والعشاء",lt:"11:00 ص – 4:00 ص"};const q=$("q").value.trim().toLowerCase();
+ let h=`<div class="box"><h2>إعدادات المطعم</h2><div class="g">
+ <div><label>اسم المطعم</label><input type="text" value="${esc(c.name)}" oninput="M.config.name=this.value;mark()"></div>
+  <div><label>Restaurant name (English)</label><input type="text" dir="ltr" value="${esc(c.name_en||"")}" oninput="M.config.name_en=this.value;mark()"></div>
+ <div><label>سطر تحت الاسم</label><input type="text" value="${esc(c.sub)}" oninput="M.config.sub=this.value;mark()"></div>
+  <div><label>Tagline (English)</label><input type="text" dir="ltr" value="${esc(c.sub_en||"")}" oninput="M.config.sub_en=this.value;mark()"></div>
+ <div><label>رقم واتساب للتواصل (بالصيغة الدولية بدون +)</label><input type="text" inputmode="numeric" dir="ltr" value="${esc(c.wa)}" oninput="M.config.wa=this.value.replace(/\\D/g,'');mark()"></div>
+ <div><label>العملة (مثل ج.م أو د.ك)</label><input type="text" value="${esc(c.cur)}" oninput="M.config.cur=this.value;mark()"></div>
+ <div><label>عدد الخانات العشرية للسعر (0 إلى 3)</label><input type="number" min="0" max="3" value="${c.dec}" oninput="M.config.dec=Math.max(0,Math.min(3,+this.value||0));mark()"></div>
+ <div><label>نسبة الخدمة % (0 = بدون خدمة)</label><input type="number" min="0" max="100" step="0.5" value="${c.service}" oninput="M.config.service=Math.max(0,Math.min(100,+this.value||0));mark()"></div>
+ <div><label>اللون الأساسي (الهيدر والأزرار)</label><input type="color" value="${esc(c.color||"#7f2220")}" oninput="M.config.color=this.value;mark()"></div>
+ <div><label>اللون الثانوي (التمييز)</label><input type="color" value="${esc(c.color2||"#de832b")}" oninput="M.config.color2=this.value;mark()"></div>
+ ${cp("bg","لون خلفية المنيو","#f6f1e7")}${cp("card","لون بطاقات الأصناف","#ffffff")}${cp("text","لون الخط","#2a1b18")}${cp("htext","لون خط الهيدر والأزرار","#ffffff")}
+ <div class="wd" style="grid-column:1/-1;color:var(--mut);font-size:12.5px">«تلقائي» يعني أن المنيو يختار لوناً مناسباً. إذا غيّرت الخلفية أو البطاقات فاختر لون خط واضح عليهما.</div>
+ <div><label>شعار المطعم</label><div class="cr"><span class="th" style="width:42px;height:42px;${c.logo?`background-image:url('${esc(c.logo)}')`:""}" onclick="pickImg('l',0)">${c.logo?"":"+"}</span>${c.logo?`<button class="mini" onclick="M.config.logo='';mark();draw()">إزالة</button>`:""}</div></div>
+ <div class="ck"><label><input type="checkbox" ${c.dine?"checked":""} onchange="M.config.dine=this.checked;mark()"> طلب داخل المطعم</label><label><input type="checkbox" ${c.delivery?"checked":""} onchange="M.config.delivery=this.checked;mark()"> توصيل</label></div></div></div>
+ <div class="box"><h2>الإفطار والغداء</h2><label class="ck" style="color:var(--tx)"><input type="checkbox" ${c.meals.on?"checked":""} onchange="M.config.meals.on=this.checked;mark();draw()"> تقسيم المنيو إلى وجبتين (يظهر زرّان أعلى المنيو، وتحدد وجبة كل قسم من قائمة الأقسام)</label>${c.meals.on?`<div class="g" style="margin-top:10px"><div><label>اسم الوجبة الأولى</label><input type="text" value="${esc(c.meals.b)}" oninput="M.config.meals.b=this.value;mark()"></div><div><label>وقتها</label><input type="text" value="${esc(c.meals.bt)}" oninput="M.config.meals.bt=this.value;mark()"></div><div><label>اسم الوجبة الثانية</label><input type="text" value="${esc(c.meals.l)}" oninput="M.config.meals.l=this.value;mark()"></div><div><label>وقتها</label><input type="text" value="${esc(c.meals.lt)}" oninput="M.config.meals.lt=this.value;mark()"></div><div><label>Meal 1 name (English)</label><input type="text" dir="ltr" value="${esc(c.meals.be||"")}" oninput="M.config.meals.be=this.value;mark()"></div><div><label>Meal 1 time (English)</label><input type="text" dir="ltr" value="${esc(c.meals.bte||"")}" oninput="M.config.meals.bte=this.value;mark()"></div><div><label>Meal 2 name (English)</label><input type="text" dir="ltr" value="${esc(c.meals.le||"")}" oninput="M.config.meals.le=this.value;mark()"></div><div><label>Meal 2 time (English)</label><input type="text" dir="ltr" value="${esc(c.meals.lte||"")}" oninput="M.config.meals.lte=this.value;mark()"></div></div>`:""}</div>
+ <div class="box"><h2>الأقسام</h2>${M.cats.map((k,i)=>`<div class="cr"><span class="th" style="width:42px;height:42px;${k.img?`background-image:url('${esc(k.img)}')`:""}" onclick="pickImg('c',${k.id})">${k.img?"":"+"}</span><input type="text" placeholder="اسم القسم" value="${esc(k.ar)}" oninput="M.cats[${i}].ar=this.value;mark()"><input type="text" placeholder="English" dir="ltr" value="${esc(k.en)}" oninput="M.cats[${i}].en=this.value;mark()"><input type="text" placeholder="ملاحظة تحت اسم القسم" value="${esc(k.note||"")}" oninput="M.cats[${i}].note=this.value;mark()"><input type="text" dir="ltr" placeholder="Category note (English)" value="${esc(k.note_en||"")}" oninput="M.cats[${i}].note_en=this.value;mark()">${c.meals.on?`<select onchange="M.cats[${i}].meal=this.value;mark()"><option value=""${k.meal?"":" selected"}>الوجبتان</option><option value="b"${k.meal=="b"?" selected":""}>${esc(c.meals.b)}</option><option value="l"${k.meal=="l"?" selected":""}>${esc(c.meals.l)}</option></select>`:""}<button class="mini" onclick="mv(M.cats,${i},-1)">↑</button><button class="mini" onclick="mv(M.cats,${i},1)">↓</button><button class="mini dg" onclick="delCat(${k.id})">حذف</button></div>`).join("")}<button onclick="addCat()">+ قسم جديد</button></div>${infoBox()}
+`;
+ M.cats.forEach(k=>{const L=M.items.filter(i=>i.cat==k.id&&(!q||(i.ar+" "+i.en).toLowerCase().includes(q)));if(q&&!L.length)return;
+  h+=`<div class="cat"><div class="ch"><span>${esc(k.ar)} <small style="color:var(--mut)">(${M.items.filter(i=>i.cat==k.id).length})</small></span><button class="pr mini" onclick="addItem(${k.id})">+ إضافة صنف</button></div>`+L.map(i=>`<div class="ir${i.avail?"":" off"}"><div class="th" style="${i.img?`background-image:url('${esc(i.img)}')`:""}" onclick="pickImg('i',${i.id})" title="تغيير الصورة">${i.img?"":"صورة"}</div><div class="f">
+   <div><label>الاسم</label><input type="text" id="n${i.id}" value="${esc(i.ar)}" oninput="it(${i.id}).ar=this.value;mark()"></div>
+   <div><label>English</label><input type="text" dir="ltr" value="${esc(i.en)}" oninput="it(${i.id}).en=this.value;mark()"></div>
+   <div><label>السعر (${esc(c.cur)})</label><input type="number" min="0" step="${1/Math.pow(10,c.dec)}" value="${i.price}" oninput="it(${i.id}).price=Math.max(0,+this.value||0);mark()"></div>
+   <div class="wd"><label>وصف (اختياري)</label><input type="text" value="${esc(i.desc)}" oninput="it(${i.id}).desc=this.value;mark()"></div>
+    <div class="wd"><label>Description (English, optional)</label><input type="text" dir="ltr" value="${esc(i.desc_en||"")}" oninput="it(${i.id}).desc_en=this.value;mark()"></div>
+   <div class="ck wd"><label><input type="checkbox" ${i.avail?"checked":""} onchange="it(${i.id}).avail=this.checked;mark();draw()"> متاح</label><label><input type="checkbox" ${i.new?"checked":""} onchange="it(${i.id}).new=this.checked;mark()"> جديد</label>${i.img?`<button class="mini" onclick="it(${i.id}).img='';mark();draw()">إزالة الصورة</button>`:""}<button class="mini" onclick="mvItem(${i.id},-1)">↑</button><button class="mini" onclick="mvItem(${i.id},1)">↓</button><button class="mini dg" onclick="delItem(${i.id})">حذف الصنف</button></div></div></div>`).join("")+"</div>"});
+ $("app").innerHTML=h}
+const it=id=>M.items.find(i=>i.id==id);
+function infoBox(){const f=M.info;if(!f)return`<div class="box"><h2>جدول معلومات (اختياري)</h2><p style="color:var(--mut);margin:0 0 8px">مثل جدول مصادر اللحوم أو مسببات الحساسية. يظهر كزر في أعلى المنيو.</p><button onclick="addInfo()">+ إنشاء جدول</button></div>`;
+ return`<div class="box"><h2>جدول معلومات</h2><div class="g"><div><label>عنوان الجدول (يظهر على الزر)</label><input type="text" value="${esc(f.title)}" oninput="M.info.title=this.value;mark()"></div></div>
+ <label style="margin-top:10px">أسماء الأعمدة</label><div class="cr" style="flex-wrap:wrap">${f.cols.map((c,i)=>`<input type="text" style="flex:1;min-width:110px" value="${esc(c)}" oninput="M.info.cols[${i}]=this.value;mark()">`).join("")}<button class="mini" onclick="infoCol(1)">+ عمود</button><button class="mini dg" onclick="infoCol(-1)">− عمود</button></div>
+ <div style="overflow:auto"><table style="width:100%;border-collapse:collapse">${f.rows.map((r,ri)=>`<tr>${f.cols.map((c,ci)=>`<td style="padding:3px"><input type="text" value="${esc(r[ci]||"")}" oninput="M.info.rows[${ri}][${ci}]=this.value;mark()"></td>`).join("")}<td><button class="mini dg" onclick="M.info.rows.splice(${ri},1);mark();draw()">حذف</button></td></tr>`).join("")}</table></div>
+ <div class="cr" style="margin-top:8px"><button onclick="infoRow()">+ سطر</button><button class="dg" onclick="delInfo()">حذف الجدول</button></div></div>`}
+function openPw(){$("po").value=$("pn").value="";$("pe").textContent="";$("pw").classList.add("on")}
+async function doPw(){$("pe").textContent="";try{await api("setpw",{old:$("po").value,new:$("pn").value});$("pw").classList.remove("on");toast("تم تغيير كلمة المرور ✓ (تُستخدم من الآن في الدخول)",5000)}catch(e){$("pe").textContent=e.message=="auth"?"":e.message}}
+function addInfo(){M.info={title:"جدول معلومات",cols:["العمود 1","العمود 2"],rows:[]};mark();draw()}
+function infoCol(d){const f=M.info;if(d>0){if(f.cols.length>=8)return;f.cols.push("عمود "+(f.cols.length+1));f.rows.forEach(r=>r.push(""))}else{if(f.cols.length<2)return;f.cols.pop();f.rows.forEach(r=>r.pop())}mark();draw()}
+function infoRow(){M.info.rows.push(M.info.cols.map(()=>""));mark();draw()}
+function delInfo(){if(confirm("حذف الجدول بالكامل؟")){delete M.info;mark();draw()}}
+function mv(a,i,d){const j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];mark();draw()}
+function mvItem(id,d){const L=M.items.filter(i=>i.cat==it(id).cat),p=L.findIndex(i=>i.id==id),o=L[p+d];if(!o)return;const a=M.items.indexOf(it(id)),b=M.items.indexOf(o);[M.items[a],M.items[b]]=[M.items[b],M.items[a]];mark();draw()}
+function addCat(){M.cats.push({id:nid(M.cats),ar:"قسم جديد",en:"",img:""});mark();draw()}
+function delCat(id){const n=M.items.filter(i=>i.cat==id).length;if(M.cats.length<2){toast("لازم يبقى قسم واحد على الأقل");return}if(!confirm(n?`حذف القسم و${n} صنف بداخله؟`:"حذف القسم؟"))return;M.cats=M.cats.filter(k=>k.id!=id);M.items=M.items.filter(i=>i.cat!=id);mark();draw()}
+function addItem(cat){const id=nid(M.items);let p=-1;M.items.forEach((x,i)=>{if(x.cat==cat)p=i});
+ const n={id,cat,ar:"",en:"",desc:"",desc_en:"",price:0,img:"",avail:true,new:false};if(p<0)M.items.push(n);else M.items.splice(p+1,0,n);
+ $("q").value="";mark();draw();const e=$("n"+id);if(e){e.focus();e.scrollIntoView({block:"center"})}}
+function delItem(id){const i=it(id);if(!confirm("حذف «"+(i.ar||"صنف بدون اسم")+"» نهائياً؟"))return;M.items=M.items.filter(x=>x.id!=id);mark();draw()}
+function pickImg(type,id){const f=document.createElement("input");f.type="file";f.accept="image/*";f.onchange=async()=>{const file=f.files[0];if(!file)return;toast("جارٍ رفع الصورة...",20000);
+ const fd=new FormData();fd.append("file",file);try{const j=await api("upload",null,fd);if(type=="i")it(id).img=j.path;else if(type=="l")M.config.logo=j.path;else M.cats.find(k=>k.id==id).img=j.path;mark();draw();toast("تم رفع الصورة ✓. لا تنس حفظ التغييرات")}catch(e){if(e.message!="auth")toast("تعذر الرفع: "+e.message,6000)}};f.click()}
+function backup(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(M,null,1)],{type:"application/json"}));a.download="menu-backup-"+new Date().toISOString().slice(0,10)+".json";a.click()}
+function restore(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const m=JSON.parse(r.result);if(!m.config||!m.cats||!m.items)throw 0;if(!confirm("استبدال المنيو الحالي بالنسخة المحددة؟ (لن يُحفظ إلا بعد الضغط على حفظ)"))return;M=m;mark();draw()}catch(e){toast("ملف النسخة الاحتياطية غير صالح")}inp.value=""};r.readAsText(f)}
+
+let US=[],UE=null;const RL={manager:"مدير",waiter:"ويتر (طاولات)",delivery:"موظف توصيل",kitchen:"مطبخ"};
+async function openUs(){$("us").classList.add("on");UE=null;await usLoad()}
+async function usLoad(){try{US=(await api("users")).users;usDraw()}catch(e){if(e.message!="auth")$("usb").innerHTML='<p class="er">'+esc(e.message)+'</p>'}}
+function usDraw(){let h="";
+ if(UE){const u=UE;h+=`<div class="box"><h2>${u.id?"تعديل موظف":"موظف جديد"}</h2><div class="g">
+ <div><label>الاسم الظاهر</label><input type="text" id="un" value="${esc(u.name)}"></div>
+ <div><label>اسم المستخدم (إنجليزي)</label><input type="text" id="uu" dir="ltr" autocapitalize="none" value="${esc(u.username)}"></div>
+ <div><label>${u.id?"كلمة مرور جديدة (اتركها فارغة بدون تغيير)":"كلمة المرور (6 أحرف على الأقل)"}</label><input type="text" id="up" dir="ltr" autocomplete="off"></div>
+ <div><label>الدور</label><select id="ur" onchange="$('utw').style.display=this.value=='waiter'?'':'none'">${Object.keys(RL).map(k=>`<option value="${k}"${u.role==k?" selected":""}>${RL[k]}</option>`).join("")}</select></div>
+ <div id="utw" style="${u.role=="waiter"?"":"display:none"}"><label>الطاولات (مثل: 1-8, 12, 15-20)</label><input type="text" id="ut" dir="ltr" value="${esc(u.tbls)}"></div>
+ <div class="ck"><label><input type="checkbox" id="ua"${u.active?" checked":""}> حساب نشط</label></div></div>
+ <div class="er" id="ue" role="alert"></div><div class="tb"><button class="pr" onclick="usSave()">حفظ</button><button onclick="UE=null;usDraw()">إلغاء</button></div></div>`}
+ else h+='<button class="pr" onclick="usEdit(0)">+ موظف جديد</button>';
+ h+=`<div style="overflow:auto;margin-top:10px"><table><tr><th>الاسم</th><th>المستخدم</th><th>الدور</th><th>الطاولات</th><th></th></tr>${US.map(u=>`<tr><td>${esc(u.name)} ${u.active?"":'<span class="bg">موقوف</span>'}</td><td dir="ltr">${esc(u.username)}</td><td>${RL[u.role]||""}</td><td dir="ltr">${u.role=="waiter"?esc(u.tbls)||"—":""}</td><td><button class="mini" onclick="usEdit(${u.id})">تعديل</button> <button class="mini dg" onclick="usDel(${u.id})">حذف</button></td></tr>`).join("")||'<tr><td colspan="5" style="color:var(--mut)">لا يوجد موظفون بعد. أضف ويتر ومطبخ وموظف توصيل.</td></tr>'}</table></div>
+ <p style="color:var(--mut);font-size:12.5px">طلبات الصالة تذهب للويتر المربوط برقم الطاولة وللمدير. الطاولة غير المربوطة تظهر للمدير فقط. طلبات التوصيل تذهب لموظفي التوصيل وللمدير.</p>`;
+ $("usb").innerHTML=h}
+function usEdit(id){UE=id?Object.assign({},US.find(u=>u.id==id)):{id:0,name:"",username:"",role:"waiter",tbls:"",active:1};usDraw()}
+async function usSave(){const b={id:UE.id,name:$("un").value,username:$("uu").value,password:$("up").value,role:$("ur").value,tbls:$("ut").value,active:$("ua").checked};
+ try{await api("user_save",b);toast("تم الحفظ ✓");UE=null;await usLoad()}catch(e){if(e.message!="auth")$("ue").textContent=e.message}}
+async function usDel(id){if(!confirm("حذف هذا الموظف؟ (يمكنك إيقاف الحساب بدلاً من الحذف)"))return;try{await api("user_del",{id});await usLoad()}catch(e){if(e.message!="auth")toast(e.message)}}
+fetch("api.php?action=whoami&_="+Date.now(),{credentials:"same-origin",cache:"no-store"}).then(r=>r.json()).then(j=>{if(j.ok){$("lg").classList.remove("on");load()}}).catch(()=>{$("er").textContent="تعذر الاتصال بالخادم (api.php)"});
+</script></body></html>

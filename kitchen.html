@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>المطبخ</title>
+<style>
+.bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:10px 0;padding:10px 12px;background:var(--card);border:1px solid var(--bd);border-radius:12px;font-size:14px}
+.bar label{display:flex;gap:6px;align-items:center}.bar input[type=checkbox]{width:20px;height:20px;accent-color:var(--ac)}
+.cols{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start}
+.col h2{margin:0 0 8px;font-size:17px;display:flex;justify-content:space-between}
+.col h2 span{background:var(--ac);color:#fff;border-radius:999px;padding:0 10px;font-size:14px}
+.kc{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px;margin-bottom:10px;border-top:6px solid var(--bl)}
+.col.p .kc{border-top-color:#a855f7}.col.r .kc{border-top-color:var(--ok)}
+.kc.fresh{animation:pl 1.2s ease-in-out 6}@keyframes pl{50%{box-shadow:0 0 0 4px var(--ac)}}
+@media (prefers-reduced-motion:reduce){.kc.fresh{animation:none;box-shadow:0 0 0 3px var(--ac)}}
+.kh{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.kh .no{font-size:24px;font-weight:700}.kh .ty{font-weight:700;font-size:17px}.kh .ag{margin-inline-start:auto;color:var(--mut);font-size:13px}
+.kc ul{margin:8px 0;padding:0;list-style:none}.kc li{display:flex;gap:10px;font-size:20px;font-weight:700;padding:4px 0;border-bottom:1px dashed var(--bd)}.kc li b{min-width:44px;color:var(--ac)}
+.nt{background:#fef3c7;color:#78350f;border-radius:8px;padding:8px 10px;font-weight:700;font-size:16px;margin-bottom:8px}
+.ka{display:flex;gap:8px}.ka button{flex:1;min-height:52px;font-size:17px}.ka button.sm{flex:none;min-height:52px}
+.em{color:var(--mut);text-align:center;padding:24px 8px}
+</style></head><body>
+<header class="sh"><div class="w"><h1>🍳 شاشة المطبخ</h1><div class="tb"><span id="who" class="mut"></span><a class="bt" id="lk" href="orders.html" hidden>الطلبات</a><button onclick="logout()">خروج</button></div></div></header>
+<div class="w">
+<div class="bar"><label><input type="checkbox" id="auto" onchange="lset('auto',this.checked?'1':'0')"> طباعة تلقائية للطلبات الجديدة</label>
+<label>نوع الطابعة / الورق: <select id="pp" class="ppsel" onchange="setPaper(this.value)"></select></label>
+<button onclick="reprintLast()">🖨️ إعادة طباعة آخر طلب</button><span class="mut" id="pq"></span>
+<details style="flex-basis:100%"><summary class="mut" style="cursor:pointer">كيف أختار الطابعة؟</summary><div class="mut" style="font-size:13px;padding-top:6px">المتصفح لا يسمح للصفحة باختيار الطابعة بنفسها، فالطباعة تتم على الطابعة الافتراضية في الجهاز، وعرض الورق يؤخذ من إعداد الطابعة نفسها (للحرارية اختر Roll 80mm أو 58mm من Printing Preferences): اجعل طابعة المطبخ (الحرارية أو الورقية) هي الافتراضية من إعدادات ويندوز، واختر نوعها من القائمة بالأعلى. لو أردت اختيار الطابعة في كل مرة أوقف "الطباعة التلقائية" واستخدم زر 🖨️ في كل طلب فيظهر مربع اختيار الطابعة. ولتشغيل الطباعة المباشرة بدون أي مربعات شغّل Chrome بالخيار <b dir="ltr">--kiosk-printing</b>.</div></details></div>
+<div class="cols"><div class="col"><h2>جديد <span id="c1">0</span></h2><div id="n"></div></div><div class="col p"><h2>قيد التحضير <span id="c2">0</span></h2><div id="p"></div></div><div class="col r"><h2>جاهز <span id="c3">0</span></h2><div id="r"></div></div></div></div>
+<script>window.addEventListener("load",function(){if(typeof staffInit==="undefined")document.body.insertAdjacentHTML("afterbegin",'<p style="margin:0;padding:14px;background:#b42318;color:#fff;text-align:center;font:15px Tahoma">تعذر تحميل الملف staff.js: تأكد أنه مرفوع بجانب هذه الصفحة وأن صلاحيته 644</p>')})</script>
+<script src="staff.js"></script>
+<script>
+let FR={},Q=[],busy=false,QD={};
+staffInit({title:"المطبخ",roles:["kitchen","manager"],onReady:u=>{
+  $("who").textContent=u.name+" · "+ROLE[u.role];if(u.role=="manager")$("lk").hidden=false;
+  $("auto").checked=lget("auto","1")=="1";$("pp").innerHTML=paperOpts();setPaper(lget("paper","80"));
+  setTimeout(()=>{audio();if(!AC||AC.state!=="running")sndBar(true)},400);
+  OR.start((list,fresh)=>{if(fresh.some(o=>o.status=="new"||o.status=="prep")){beep(3)}fresh.forEach(o=>FR[o.id]=Date.now());draw(list);autoPrint(list)})}});
+function draw(list){
+  const by=s=>list.filter(o=>o.status==s);const N=by("new").reverse(),P=by("prep").reverse(),R=by("ready").reverse();
+  $("c1").textContent=N.length;$("c2").textContent=P.length;$("c3").textContent=R.length;
+  $("n").innerHTML=N.map(o=>kc(o,"prep","👨‍🍳 بدء التحضير")).join("")||'<div class="em">—</div>';
+  $("p").innerHTML=P.map(o=>kc(o,"ready","✔️ جاهز")).join("")||'<div class="em">—</div>';
+  $("r").innerHTML=R.map(o=>kc(o,null,"")).join("")||'<div class="em">—</div>'}
+function kc(o,next,lbl){const fresh=FR[o.id]&&Date.now()-FR[o.id]<25000;
+  return `<div class="kc${fresh?" fresh":""}"><div class="kh"><span class="no">#${o.no}</span><span class="ty">${o.type=="d"?"🍽️ طاولة "+esc(o.tbl):"🛵 توصيل"}</span>${o.batches>1?'<span class="ty" style="color:var(--wn)">➕ ملحق</span>':""}<span class="ag">${hhmm(o.created)} · ${ago(o.created)}</span></div><ul>${itemsLI(o)}</ul>${o.note?`<div class="nt">📝 ${esc(o.note)}</div>`:""}<div class="ka">${next?`<button class="pr" onclick="mv(this,${o.id},'${next}')">${lbl}</button>`:`<span class="mut" style="flex:1;padding:10px 0">بانتظار الاستلام</span>`}<button class="sm" title="طباعة" onclick="printTicket(OR.map[${o.id}])">🖨️</button></div></div>`}
+async function mv(b,id,s){b.disabled=true;try{const j=await api("order_set",{id,status:s});OR.put(j.order)}catch(e){if(e.message!="auth")alert(e.message);b.disabled=false}}
+function autoPrint(list){if(!$("auto").checked)return;
+  list.filter(o=>(o.status=="new"||o.status=="prep")&&o.printed<o.batches).reverse().forEach(o=>{const n=o.printed+1,key=o.id+"_"+n;if(!QD[key]){QD[key]=1;Q.push({o,n,key})}});runQ()}
+async function runQ(){if(busy)return;busy=true;
+  while(Q.length){const x=Q.shift();$("pq").textContent="في قائمة الطباعة: "+(Q.length+1);
+    try{const r=await api("print_claim",{id:x.o.id,n:x.n});if(r.claimed){OR.put(r.order);await printTicket(r.order,x.n-1)}}catch(e){delete QD[x.key]}}
+  $("pq").textContent="";busy=false}
+function reprintLast(){const l=OR.list();printTicket(l.length?l[0]:{no:1,created:Math.floor(Date.now()/1000),type:"d",tbl:"1",items:[{q:1,n:"صنف"}],note:"",sub:0,svc:0,total:0})}
+setInterval(()=>{if(ME&&OR.cb)draw(OR.list())},30000);
+</script></body></html>

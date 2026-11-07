@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>QR الطاولات</title>
+<style>
+body{margin:0;font:15px/1.6 Tahoma,"Segoe UI",sans-serif;background:#f3f4f6;color:#1d2433}
+.w{max-width:960px;margin:auto;padding:14px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:end;background:#fff;border:1px solid #d6dbe4;border-radius:12px;padding:12px}
+.bar label{font-size:12.5px;color:#667085;display:block}.bar input{padding:8px;border:1px solid #d6dbe4;border-radius:8px;font:inherit;width:100px}.bar input.u{width:340px;max-width:100%}
+button{font:inherit;border:0;background:#0f766e;color:#fff;border-radius:9px;padding:9px 16px;cursor:pointer;font-weight:700}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:14px}
+.c{background:#fff;border:1px solid #d6dbe4;border-radius:14px;padding:12px;text-align:center;break-inside:avoid}
+.c img{width:100%;max-width:180px;height:auto}.c h3{margin:6px 0 0;font-size:22px}.c p{margin:2px 0 0;font-size:12.5px;color:#667085}
+.nt{font-size:13px;color:#667085;margin-top:10px}
+@media print{body{background:#fff}.bar,.nt{display:none}.g{grid-template-columns:repeat(3,1fr);gap:8px}.c{border:1px solid #999}}
+</style></head><body><div class="w">
+<div class="bar"><div><label>من طاولة</label><input id="a" type="number" min="1" value="1"></div><div><label>إلى طاولة</label><input id="b" type="number" min="1" value="10"></div>
+<div><label>رابط المنيو</label><input class="u" id="u" dir="ltr"></div><button onclick="gen()">إنشاء</button><button onclick="window.print()">طباعة</button></div>
+<div class="nt">كل رمز QR يفتح المنيو ورقم الطاولة مكتوب تلقائياً فيه. الرموز تُنشأ عبر خدمة api.qrserver.com، فيلزم اتصال بالإنترنت أثناء إنشائها وطباعتها.</div>
+<div class="g" id="g"></div></div>
+<script>
+const $=id=>document.getElementById(id);
+let NAME="";
+$("u").value=new URL("index.html",location.href).href;
+fetch("api.php?action=menu").then(r=>r.json()).then(m=>{NAME=m.config.name||"";gen()}).catch(gen);
+function gen(){const a=Math.max(1,+$("a").value||1),b=Math.min(200,Math.max(a,+$("b").value||a)),u=$("u").value.trim();let h="";
+ for(let i=a;i<=b;i++){const link=u+(u.indexOf("?")<0?"?":"&")+"t="+i;
+  h+=`<div class="c"><img alt="QR" loading="lazy" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=6&data=${encodeURIComponent(link)}"><h3>طاولة ${i}</h3><p>${NAME?NAME.replace(/[<>&]/g,""):""}</p><p>امسح الرمز لعرض المنيو وطلب طعامك</p></div>`}
+ $("g").innerHTML=h}
+</script></body></html>
